@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
 });
 //
 
-// tpost request for new products
+// post request for new products
 router.post("/add-new", async (req, res) => {
   const title = req.body.title;
   const image = req.body.image;
