@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const usersRoute = require("./routes/users");
+const productsRoute = require("./routes/products");
 const path = require("path");
 const dotenv = require("dotenv");
 
@@ -30,6 +31,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", usersRoute);
+
+app.use("/products", productsRoute);
 
 const PORT = 5000;
 
