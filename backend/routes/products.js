@@ -17,8 +17,7 @@ router.post("/add-new", async (req, res) => {
   }
 
   const productExists = await Product.find({ title }).limit(1).lean();
-  console.log(productExists);
-  if (productExists != 0) {
+  if (productExists.length !== 0) {
     res
       .status(400)
       .send("Product with following title is already in the database.");
