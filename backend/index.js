@@ -21,7 +21,11 @@ if (process.env.NODE_ENV === "production") {
 const dbURI = "mongodb://localhost:27017/ecom";
 
 mongoose
-  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(dbURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then((result) => console.log("connected to db"))
   .catch((err) => console.log(err));
 
