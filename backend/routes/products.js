@@ -34,4 +34,36 @@ router.post("/add-new", async (req, res) => {
   res.status(500).send("Product creation failed. please try again later");
 });
 
+router.put("/:id", async (req, res) => {
+  const productId = req.params.id;
+  let params = {
+    title: req.body.title,
+    image: req.body.image,
+    description: req.body.description,
+    category: req.body.category,
+    price: req.body.price,
+  };
+  for (let prop in params) if (!params[prop]) delete params[prop]; //Goes through the params and deletes them if they have a falsy value.
+
+  if (productId) {
+    const productEdit = await Product.findOneAndUpdate(
+      { _id: productId },
+      params,
+      {
+        returnNewDocument: true,
+      }
+    );
+    res.send("Changes were saved.");
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const productId = req.params.id;
+
+  if (productId) {
+    const productDelete = await Product.findOneAndDelete({ _id: productId });
+    res.send("The product was successfully deleted from the databse.");
+  }
+});
+
 module.exports = router;
