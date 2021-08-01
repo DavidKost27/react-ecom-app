@@ -36,34 +36,40 @@ router.post("/add-new", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const productId = req.params.id;
-  let params = {
-    title: req.body.title,
-    image: req.body.image,
-    description: req.body.description,
-    category: req.body.category,
-    price: req.body.price,
-  };
-  for (let prop in params) if (!params[prop]) delete params[prop]; //Goes through the params and deletes them if they have a falsy value.
 
   if (productId) {
+    let params = ({ title, image, description, category, price } = req.body);
+
+    for (let prop in params) if (!params[prop]) delete params[prop]; //Goes through the params and deletes them if they have a falsy value.
+
     const productEdit = await Product.findOneAndUpdate(
       { _id: productId },
       params,
-      {
-        returnNewDocument: true,
-      }
+      { returnNewDocument: true }
     );
-    res.send("Changes were saved.");
+    res.status(200).send("Changes were saved.");
+    return;
   }
+  res.status(500).send("Product creation failed. please try again later");
 });
 
 router.delete("/:id", async (req, res) => {
   const productId = req.params.id;
-
+  const productExists = await Product.find({ _id: productId }).limit(1).lean();
+  if (productExists.length == 0) {
+    res
+      .status(400)
+      .send("A product with the following ID dosen't exist in DB.");
+    return;
+  }
   if (productId) {
     const productDelete = await Product.findOneAndDelete({ _id: productId });
-    res.send("The product was successfully deleted from the databse.");
+    res
+      .status(200)
+      .send("The product was successfully deleted from the databse.");
+    return;
   }
+  res.status(500).send("Product creation failed. please try again later");
 });
 
 module.exports = router;
